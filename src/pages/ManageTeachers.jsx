@@ -1,38 +1,33 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
+import { getTeachers } from "../api/teacherApi";
 
 function ManageTeachers() {
 
-    const [teachers, setTeachers] = useState([
-
-        {
-            id: 1,
-            name: "Ram Sharma",
-            email: "ram@gmail.com",
-            phone: "9811111111",
-            department: "Computer"
-        },
-
-        {
-            id: 2,
-            name: "Hari KC",
-            email: "hari@gmail.com",
-            phone: "9822222222",
-            department: "BCA"
-        },
-
-        {
-            id: 3,
-            name: "Sita Nepal",
-            email: "sita@gmail.com",
-            phone: "9833333333",
-            department: "BBA"
-        }
-
-    ]);
+    const [teachers, setTeachers] = useState([]);
 
     const [editingTeacher, setEditingTeacher] = useState(null);
+
+    useEffect(() => {
+        loadTeachers();
+    }, []);
+
+    async function loadTeachers() {
+
+        try {
+
+            const response = await getTeachers();
+
+            setTeachers(response.data);
+
+        } catch (error) {
+
+            console.log(error);
+
+        }
+
+    }
 
     const handleChange = (e) => {
 
@@ -129,7 +124,7 @@ function ManageTeachers() {
 
                                             <td>{teacher.id}</td>
 
-                                            <td>{teacher.name}</td>
+                                            <td>{teacher.fullname}</td>
 
                                             <td>{teacher.email}</td>
 
@@ -189,8 +184,8 @@ function ManageTeachers() {
 
                                     <input
                                         className="form-control"
-                                        name="name"
-                                        value={editingTeacher.name}
+                                        name="fullname"
+                                        value={editingTeacher.fullname}
                                         onChange={handleChange}
                                     />
 
@@ -232,10 +227,12 @@ function ManageTeachers() {
                                         value={editingTeacher.department}
                                         onChange={handleChange}
                                     >
+
                                         <option>Computer</option>
                                         <option>BCA</option>
                                         <option>BBA</option>
                                         <option>BHM</option>
+
                                     </select>
 
                                 </div>

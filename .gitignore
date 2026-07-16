@@ -1,3 +1,12 @@
-node_modules
-dist
-.env
+# Python cache
+__pycache__/
+*.pyc
+
+# Database files
+*.db
+
+# Virtual environment
+env/
+
+# Node modules
+node_modules/

@@ -1,38 +1,35 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
+import { getSubjects } from "../api/subjectApi";
 
 function ManageSubjects() {
 
-    const [subjects, setSubjects] = useState([
-
-        {
-            id: 1,
-            code: "BCA101",
-            name: "Programming Fundamentals",
-            semester: "1st",
-            department: "BCA"
-        },
-
-        {
-            id: 2,
-            code: "BCA205",
-            name: "Database Management System",
-            semester: "4th",
-            department: "BCA"
-        },
-
-        {
-            id: 3,
-            code: "BBA101",
-            name: "Business Communication",
-            semester: "1st",
-            department: "BBA"
-        }
-
-    ]);
+    const [subjects, setSubjects] = useState([]);
 
     const [editingSubject, setEditingSubject] = useState(null);
+
+    useEffect(() => {
+        loadSubjects();
+    }, []);
+
+    async function loadSubjects() {
+
+        try {
+
+            const response = await getSubjects();
+
+            setSubjects(response.data);
+
+        } catch (error) {
+
+            console.log(error);
+
+            alert("Failed to load subjects.");
+
+        }
+
+    }
 
     const handleChange = (e) => {
 
@@ -48,19 +45,7 @@ function ManageSubjects() {
 
     const saveChanges = () => {
 
-        setSubjects(
-
-            subjects.map(subject =>
-
-                subject.id === editingSubject.id
-
-                    ? editingSubject
-
-                    : subject
-
-            )
-
-        );
+        alert("Update API will be added later.");
 
         setEditingSubject(null);
 
@@ -68,15 +53,7 @@ function ManageSubjects() {
 
     const deleteSubject = (id) => {
 
-        if (window.confirm("Delete this subject?")) {
-
-            setSubjects(
-
-                subjects.filter(subject => subject.id !== id)
-
-            );
-
-        }
+        alert("Delete API will be added later.");
 
     };
 
@@ -102,7 +79,7 @@ function ManageSubjects() {
 
                         <div className="card-body">
 
-                            <table className="table table-bordered">
+                            <table className="table table-bordered table-hover">
 
                                 <thead>
 
@@ -123,7 +100,7 @@ function ManageSubjects() {
 
                                     {
 
-                                        subjects.map(subject => (
+                                        subjects.map((subject) => (
 
                                             <tr key={subject.id}>
 

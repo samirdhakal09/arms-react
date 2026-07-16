@@ -1,6 +1,7 @@
+import { useState } from "react";
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
-import { useState } from "react";
+import { addSubject } from "../api/subjectApi";
 
 function AddSubject() {
 
@@ -20,26 +21,37 @@ function AddSubject() {
 
     }
 
-    function saveSubject(e) {
+    async function saveSubject(e) {
 
         e.preventDefault();
 
-        alert("Subject Added Successfully");
+        try {
 
-        console.log(subject);
+            await addSubject(subject);
 
-        setSubject({
-            code: "",
-            name: "",
-            semester: "",
-            department: ""
-        });
+            alert("Subject Added Successfully ✅");
+
+            setSubject({
+                code: "",
+                name: "",
+                semester: "",
+                department: ""
+            });
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert("Failed to Add Subject ❌");
+
+        }
 
     }
 
     return (
 
         <>
+
             <Sidebar />
 
             <div className="main">
@@ -62,12 +74,14 @@ function AddSubject() {
 
                                 <div className="mb-3">
 
-                                    <label>Subject Code</label>
+                                    <label className="form-label">
+                                        Subject Code
+                                    </label>
 
                                     <input
                                         type="text"
-                                        name="code"
                                         className="form-control"
+                                        name="code"
                                         value={subject.code}
                                         onChange={handleChange}
                                         required
@@ -77,12 +91,14 @@ function AddSubject() {
 
                                 <div className="mb-3">
 
-                                    <label>Subject Name</label>
+                                    <label className="form-label">
+                                        Subject Name
+                                    </label>
 
                                     <input
                                         type="text"
-                                        name="name"
                                         className="form-control"
+                                        name="name"
                                         value={subject.name}
                                         onChange={handleChange}
                                         required
@@ -92,25 +108,30 @@ function AddSubject() {
 
                                 <div className="mb-3">
 
-                                    <label>Semester</label>
+                                    <label className="form-label">
+                                        Semester
+                                    </label>
 
                                     <select
-                                        name="semester"
                                         className="form-control"
+                                        name="semester"
                                         value={subject.semester}
                                         onChange={handleChange}
+                                        required
                                     >
 
-                                        <option value="">Choose Semester</option>
+                                        <option value="">
+                                            Select Semester
+                                        </option>
 
-                                        <option>1st</option>
-                                        <option>2nd</option>
-                                        <option>3rd</option>
-                                        <option>4th</option>
-                                        <option>5th</option>
-                                        <option>6th</option>
-                                        <option>7th</option>
-                                        <option>8th</option>
+                                        <option value="1st">1st</option>
+                                        <option value="2nd">2nd</option>
+                                        <option value="3rd">3rd</option>
+                                        <option value="4th">4th</option>
+                                        <option value="5th">5th</option>
+                                        <option value="6th">6th</option>
+                                        <option value="7th">7th</option>
+                                        <option value="8th">8th</option>
 
                                     </select>
 
@@ -118,29 +139,35 @@ function AddSubject() {
 
                                 <div className="mb-3">
 
-                                    <label>Department</label>
+                                    <label className="form-label">
+                                        Department
+                                    </label>
 
                                     <select
-                                        name="department"
                                         className="form-control"
+                                        name="department"
                                         value={subject.department}
                                         onChange={handleChange}
+                                        required
                                     >
 
-                                        <option value="">Choose Department</option>
+                                        <option value="">
+                                            Select Department
+                                        </option>
 
-                                        <option>BCA</option>
-                                        <option>BBA</option>
-                                        <option>BHM</option>
+                                        <option value="BCA">BCA</option>
+                                        <option value="BBA">BBA</option>
+                                        <option value="BHM">BHM</option>
 
                                     </select>
 
                                 </div>
 
-                                <button className="btn btn-success">
-
+                                <button
+                                    type="submit"
+                                    className="btn btn-success"
+                                >
                                     Save Subject
-
                                 </button>
 
                             </form>

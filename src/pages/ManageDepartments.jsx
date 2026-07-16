@@ -1,240 +1,183 @@
-import {useState} from "react";
+import { useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
+import axios from "axios";
 
-function ManageDepartments(){
+function ManageDepartments() {
 
-const [departments,setDepartments]=useState([
+    const [departments, setDepartments] = useState([]);
+    const [editing, setEditing] = useState(null);
 
-{
-id:1,
-name:"BCA",
-code:"BCA",
-hod:"Ram Sharma"
-},
+    useEffect(() => {
+        loadDepartments();
+    }, []);
 
-{
-id:2,
-name:"BBA",
-code:"BBA",
-hod:"Hari KC"
-},
+    async function loadDepartments() {
+        try {
+            const res = await axios.get("http://127.0.0.1:8000/departments/");
+            setDepartments(res.data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
-{
-id:3,
-name:"BHM",
-code:"BHM",
-hod:"Sita Nepal"
-}
+    function handleChange(e) {
+        setEditing({
+            ...editing,
+            [e.target.name]: e.target.value
+        });
+    }
 
-]);
+    function save() {
+        alert("Update API will be added later.");
+        setEditing(null);
+    }
 
-const [editing,setEditing]=useState(null);
+    function remove(id) {
+        alert("Delete API will be added later.");
+    }
 
-function handleChange(e){
+    return (
+        <>
+            <Sidebar />
 
-setEditing({
+            <div className="main">
 
-...editing,
+                <Navbar />
 
-[e.target.name]:e.target.value
+                <div className="container mt-4">
 
-});
+                    <div className="card shadow">
 
-}
+                        <div className="card-header bg-success text-white">
 
-function save(){
+                            <h3>Manage Departments</h3>
 
-setDepartments(
+                        </div>
 
-departments.map(d=>
+                        <div className="card-body">
 
-d.id===editing.id?editing:d
+                            <table className="table table-bordered table-hover">
 
-)
+                                <thead>
 
-);
+                                    <tr>
 
-alert("Department Updated");
+                                        <th>ID</th>
+                                        <th>Department Name</th>
+                                        <th>Faculty</th>
+                                        <th>Action</th>
 
-setEditing(null);
+                                    </tr>
 
-}
+                                </thead>
 
-function remove(id){
+                                <tbody>
 
-if(window.confirm("Delete Department?")){
+                                    {departments.map((dep) => (
 
-setDepartments(
+                                        <tr key={dep.id}>
 
-departments.filter(d=>d.id!==id)
+                                            <td>{dep.id}</td>
 
-);
+                                            <td>{dep.name}</td>
 
-}
+                                            <td>{dep.faculty}</td>
 
-}
+                                            <td>
 
-return(
+                                                <button
+                                                    className="btn btn-warning btn-sm me-2"
+                                                    onClick={() => setEditing(dep)}
+                                                >
+                                                    Edit
+                                                </button>
 
-<>
+                                                <button
+                                                    className="btn btn-danger btn-sm"
+                                                    onClick={() => remove(dep.id)}
+                                                >
+                                                    Delete
+                                                </button>
 
-<Sidebar/>
+                                            </td>
 
-<div className="main">
+                                        </tr>
 
-<Navbar/>
+                                    ))}
 
-<div className="container mt-4">
+                                </tbody>
 
-<div className="card shadow">
+                            </table>
 
-<div className="card-header bg-success text-white">
+                        </div>
 
-<h3>Manage Departments</h3>
+                    </div>
 
-</div>
+                    {editing && (
 
-<div className="card-body">
+                        <div className="card shadow mt-4">
 
-<table className="table table-bordered">
+                            <div className="card-header bg-primary text-white">
 
-<thead>
+                                <h4>Edit Department</h4>
 
-<tr>
+                            </div>
 
-<th>ID</th>
+                            <div className="card-body">
 
-<th>Name</th>
+                                <div className="mb-3">
 
-<th>Code</th>
+                                    <label>Department Name</label>
 
-<th>HOD</th>
+                                    <input
+                                        className="form-control"
+                                        name="name"
+                                        value={editing.name}
+                                        onChange={handleChange}
+                                    />
 
-<th>Action</th>
+                                </div>
 
-</tr>
+                                <div className="mb-3">
 
-</thead>
+                                    <label>Faculty</label>
 
-<tbody>
+                                    <input
+                                        className="form-control"
+                                        name="faculty"
+                                        value={editing.faculty}
+                                        onChange={handleChange}
+                                    />
 
-{
+                                </div>
 
-departments.map(dep=>(
+                                <button
+                                    className="btn btn-success me-2"
+                                    onClick={save}
+                                >
+                                    Save
+                                </button>
 
-<tr key={dep.id}>
+                                <button
+                                    className="btn btn-secondary"
+                                    onClick={() => setEditing(null)}
+                                >
+                                    Cancel
+                                </button>
 
-<td>{dep.id}</td>
+                            </div>
 
-<td>{dep.name}</td>
+                        </div>
 
-<td>{dep.code}</td>
+                    )}
 
-<td>{dep.hod}</td>
+                </div>
 
-<td>
+            </div>
 
-<button
-className="btn btn-warning btn-sm me-2"
-onClick={()=>setEditing(dep)}
->
-
-Edit
-
-</button>
-
-<button
-className="btn btn-danger btn-sm"
-onClick={()=>remove(dep.id)}
->
-
-Delete
-
-</button>
-
-</td>
-
-</tr>
-
-))
-
-}
-
-</tbody>
-
-</table>
-
-</div>
-
-</div>
-
-{
-
-editing &&
-
-<div className="card shadow mt-4">
-
-<div className="card-header bg-primary text-white">
-
-<h4>Edit Department</h4>
-
-</div>
-
-<div className="card-body">
-
-<input
-className="form-control mb-3"
-name="name"
-value={editing.name}
-onChange={handleChange}
-/>
-
-<input
-className="form-control mb-3"
-name="code"
-value={editing.code}
-onChange={handleChange}
-/>
-
-<input
-className="form-control mb-3"
-name="hod"
-value={editing.hod}
-onChange={handleChange}
-/>
-
-<button
-className="btn btn-success me-2"
-onClick={save}
->
-
-Save
-
-</button>
-
-<button
-className="btn btn-secondary"
-onClick={()=>setEditing(null)}
->
-
-Cancel
-
-</button>
-
-</div>
-
-</div>
-
-}
-
-</div>
-
-</div>
-
-</>
-
-);
+        </>
+    );
 
 }
 

@@ -1,120 +1,127 @@
 import { useState } from "react";
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
+import axios from "axios";
 
 function AddDepartment() {
 
-    const [department,setDepartment]=useState({
-        name:"",
-        code:"",
-        hod:""
+    const [department, setDepartment] = useState({
+        name: "",
+        faculty: ""
     });
 
-    function handleChange(e){
+    function handleChange(e) {
 
         setDepartment({
             ...department,
-            [e.target.name]:e.target.value
+            [e.target.name]: e.target.value
         });
 
     }
 
-    function saveDepartment(e){
+    async function saveDepartment(e) {
 
         e.preventDefault();
 
-        alert("Department Added Successfully");
+        try {
 
-        console.log(department);
+            await axios.post(
+                "http://127.0.0.1:8000/departments/",
+                department
+            );
 
-        setDepartment({
-            name:"",
-            code:"",
-            hod:""
-        });
+            alert("Department Added Successfully");
+
+            setDepartment({
+                name: "",
+                faculty: ""
+            });
+
+        } catch (error) {
+
+            console.log(error);
+
+            alert("Failed to add department.");
+
+        }
 
     }
 
-    return(
+    return (
 
         <>
-        <Sidebar/>
 
-        <div className="main">
+            <Sidebar />
 
-            <Navbar/>
+            <div className="main">
 
-            <div className="container mt-4">
+                <Navbar />
 
-                <div className="card shadow">
+                <div className="container mt-4">
 
-                    <div className="card-header bg-primary text-white">
+                    <div className="card shadow">
 
-                        <h3>Add Department</h3>
+                        <div className="card-header bg-primary text-white">
 
-                    </div>
+                            <h3>Add Department</h3>
 
-                    <div className="card-body">
+                        </div>
 
-                        <form onSubmit={saveDepartment}>
+                        <div className="card-body">
 
-                            <div className="mb-3">
+                            <form onSubmit={saveDepartment}>
 
-                                <label>Department Name</label>
+                                <div className="mb-3">
 
-                                <input
-                                className="form-control"
-                                name="name"
-                                value={department.name}
-                                onChange={handleChange}
-                                required
-                                />
+                                    <label>Department Name</label>
 
-                            </div>
+                                    <input
+                                        className="form-control"
+                                        name="name"
+                                        value={department.name}
+                                        onChange={handleChange}
+                                        required
+                                    />
 
-                            <div className="mb-3">
+                                </div>
 
-                                <label>Department Code</label>
+                                <div className="mb-3">
 
-                                <input
-                                className="form-control"
-                                name="code"
-                                value={department.code}
-                                onChange={handleChange}
-                                required
-                                />
+                                    <label>Faculty</label>
 
-                            </div>
+                                    <select
+                                        className="form-control"
+                                        name="faculty"
+                                        value={department.faculty}
+                                        onChange={handleChange}
+                                        required
+                                    >
 
-                            <div className="mb-3">
+                                        <option value="">Select Faculty</option>
+                                        <option>Management</option>
+                                        <option>Science & Technology</option>
+                                        <option>Humanities</option>
+                                        <option>Education</option>
 
-                                <label>Head of Department</label>
+                                    </select>
 
-                                <input
-                                className="form-control"
-                                name="hod"
-                                value={department.hod}
-                                onChange={handleChange}
-                                required
-                                />
+                                </div>
 
-                            </div>
+                                <button className="btn btn-success">
 
-                            <button className="btn btn-success">
+                                    Save Department
 
-                                Save Department
+                                </button>
 
-                            </button>
+                            </form>
 
-                        </form>
+                        </div>
 
                     </div>
 
                 </div>
 
             </div>
-
-        </div>
 
         </>
 

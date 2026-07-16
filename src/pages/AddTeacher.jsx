@@ -1,11 +1,12 @@
+import { useState } from "react";
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
-import { useState } from "react";
+import { addTeacher } from "../api/teacherApi";
 
 function AddTeacher() {
 
     const [teacher, setTeacher] = useState({
-        name: "",
+        fullname: "",
         email: "",
         phone: "",
         department: ""
@@ -20,20 +21,30 @@ function AddTeacher() {
 
     }
 
-    function saveTeacher(e) {
+    async function saveTeacher(e) {
 
         e.preventDefault();
 
-        alert("Teacher Added Successfully");
+        try {
 
-        console.log(teacher);
+            await addTeacher(teacher);
 
-        setTeacher({
-            name: "",
-            email: "",
-            phone: "",
-            department: ""
-        });
+            alert("Teacher Added Successfully ✅");
+
+            setTeacher({
+                fullname: "",
+                email: "",
+                phone: "",
+                department: ""
+            });
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert("Failed to Add Teacher ❌");
+
+        }
 
     }
 
@@ -63,13 +74,15 @@ function AddTeacher() {
 
                                 <div className="mb-3">
 
-                                    <label>Name</label>
+                                    <label className="form-label">
+                                        Full Name
+                                    </label>
 
                                     <input
                                         type="text"
                                         className="form-control"
-                                        name="name"
-                                        value={teacher.name}
+                                        name="fullname"
+                                        value={teacher.fullname}
                                         onChange={handleChange}
                                         required
                                     />
@@ -78,7 +91,9 @@ function AddTeacher() {
 
                                 <div className="mb-3">
 
-                                    <label>Email</label>
+                                    <label className="form-label">
+                                        Email
+                                    </label>
 
                                     <input
                                         type="email"
@@ -93,7 +108,9 @@ function AddTeacher() {
 
                                 <div className="mb-3">
 
-                                    <label>Phone</label>
+                                    <label className="form-label">
+                                        Phone
+                                    </label>
 
                                     <input
                                         type="text"
@@ -108,33 +125,47 @@ function AddTeacher() {
 
                                 <div className="mb-3">
 
-                                    <label>Department</label>
+                                    <label className="form-label">
+                                        Department
+                                    </label>
 
                                     <select
                                         className="form-control"
                                         name="department"
                                         value={teacher.department}
                                         onChange={handleChange}
+                                        required
                                     >
 
-                                        <option value="">Choose</option>
+                                        <option value="">
+                                            Select Department
+                                        </option>
 
-                                        <option>Computer</option>
+                                        <option value="Computer">
+                                            Computer
+                                        </option>
 
-                                        <option>BBA</option>
+                                        <option value="BCA">
+                                            BCA
+                                        </option>
 
-                                        <option>BHM</option>
+                                        <option value="BBA">
+                                            BBA
+                                        </option>
 
-                                        <option>BCA</option>
+                                        <option value="BHM">
+                                            BHM
+                                        </option>
 
                                     </select>
 
                                 </div>
 
-                                <button className="btn btn-success">
-
+                                <button
+                                    type="submit"
+                                    className="btn btn-success"
+                                >
                                     Save Teacher
-
                                 </button>
 
                             </form>
