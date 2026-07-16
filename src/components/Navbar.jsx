@@ -3,15 +3,9 @@ function Navbar() {
 
     <div className="navbar-custom">
 
-      <div className="d-flex justify-content-between">
+      <div className="d-flex justify-content-between align-items-center">
 
         <h3>Admin Dashboard</h3>
-
-        <button className="btn btn-danger">
-
-          Logout
-
-        </button>
 
       </div>
 

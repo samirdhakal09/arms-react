@@ -7,21 +7,40 @@ function Home() {
       <div className="container py-5">
 
         {/* Header */}
+
         <div className="text-center text-white mb-5">
-          <h1 className="display-3 fw-bold">🎓 ARMS</h1>
-          <h3>Academic Result Management System</h3>
-          <p className="lead">Pokhara University</p>
-          <p>Select your role to continue</p>
+
+          <h1 className="display-3 fw-bold">
+            🎓 ARMS
+          </h1>
+
+          <h3>
+            Academic Result Management System
+          </h3>
+
+          <p className="lead">
+            Pokhara University
+          </p>
+
+          <p>
+            Select your role to continue
+          </p>
+
         </div>
 
         <div className="row justify-content-center">
 
-          {/* ADMIN */}
+          {/* ================= ADMIN ================= */}
+
           <div className="col-lg-4 mb-4">
+
             <div className="card shadow h-100 role-card">
+
               <div className="card-body text-center">
 
-                <div style={{ fontSize: "70px" }}>👨‍💼</div>
+                <div style={{ fontSize: "70px" }}>
+                  👨‍💼
+                </div>
 
                 <h3>ADMIN</h3>
 
@@ -45,15 +64,22 @@ function Home() {
                 </Link>
 
               </div>
+
             </div>
+
           </div>
 
-          {/* TEACHER */}
+          {/* ================= TEACHER ================= */}
+
           <div className="col-lg-4 mb-4">
+
             <div className="card shadow h-100 role-card">
+
               <div className="card-body text-center">
 
-                <div style={{ fontSize: "70px" }}>👨‍🏫</div>
+                <div style={{ fontSize: "70px" }}>
+                  👨‍🏫
+                </div>
 
                 <h3>TEACHER</h3>
 
@@ -67,23 +93,30 @@ function Home() {
                   • Publish Results
                 </p>
 
-                <button
+                <Link
+                  to="/teacher-login"
                   className="btn btn-success w-100 mt-3"
-                  disabled
                 >
-                  Coming Soon
-                </button>
+                  Login as Teacher
+                </Link>
 
               </div>
+
             </div>
+
           </div>
 
-          {/* STUDENT */}
+          {/* ================= STUDENT ================= */}
+
           <div className="col-lg-4 mb-4">
+
             <div className="card shadow h-100 role-card">
+
               <div className="card-body text-center">
 
-                <div style={{ fontSize: "70px" }}>👨‍🎓</div>
+                <div style={{ fontSize: "70px" }}>
+                  👨‍🎓
+                </div>
 
                 <h3>STUDENT</h3>
 
@@ -105,15 +138,23 @@ function Home() {
                 </button>
 
               </div>
+
             </div>
+
           </div>
 
         </div>
 
+        {/* Footer */}
+
         <div className="text-center text-white mt-5">
+
           <small>
+
             © 2026 Academic Result Management System | Pokhara University
+
           </small>
+
         </div>
 
       </div>
