@@ -4,64 +4,133 @@ import DashboardLayout from "../components/DashboardLayout";
 function AddMarks() {
 
     const [subject, setSubject] = useState("");
-
     const [semester, setSemester] = useState("");
+
+    const [errors, setErrors] = useState({});
 
     const [students, setStudents] = useState([
 
         {
-            id:1,
-            roll:"BCA001",
-            name:"Hari Sharma",
-            internal:"",
-            external:""
+            id: 1,
+            roll: "BCA001",
+            name: "Hari Sharma",
+            internal: "",
+            external: ""
         },
 
         {
-            id:2,
-            roll:"BCA002",
-            name:"Ram Karki",
-            internal:"",
-            external:""
+            id: 2,
+            roll: "BCA002",
+            name: "Ram Karki",
+            internal: "",
+            external: ""
         },
 
         {
-            id:3,
-            roll:"BCA003",
-            name:"Sita Nepal",
-            internal:"",
-            external:""
+            id: 3,
+            roll: "BCA003",
+            name: "Sita Nepal",
+            internal: "",
+            external: ""
         }
 
     ]);
 
-    function handleMarks(index, field, value){
+    function handleMarks(index, field, value) {
 
-        const updated=[...students];
+        const updated = [...students];
 
-        updated[index][field]=value;
+        updated[index][field] = value;
 
         setStudents(updated);
 
+        // Remove error when user enters value
+        setErrors((prev) => ({
+            ...prev,
+            [`${index}_${field}`]: ""
+        }));
+
     }
 
-    function saveMarks(){
+    function validateForm() {
+
+        const newErrors = {};
+
+        // Subject validation
+        if (!subject) {
+            newErrors.subject = "This field is required";
+        }
+
+        // Semester validation
+        if (!semester) {
+            newErrors.semester = "This field is required";
+        }
+
+        // Student marks validation
+        students.forEach((student, index) => {
+
+            if (student.internal === "") {
+
+                newErrors[`${index}_internal`] =
+                    "This field is required";
+
+            }
+
+            if (student.external === "") {
+
+                newErrors[`${index}_external`] =
+                    "This field is required";
+
+            }
+
+            if (
+                student.internal !== "" &&
+                Number(student.internal) > 50
+            ) {
+
+                newErrors[`${index}_internal`] =
+                    "Maximum mark is 50";
+
+            }
+
+            if (
+                student.external !== "" &&
+                Number(student.external) > 50
+            ) {
+
+                newErrors[`${index}_external`] =
+                    "Maximum mark is 50";
+
+            }
+
+        });
+
+        setErrors(newErrors);
+
+        return Object.keys(newErrors).length === 0;
+
+    }
+
+    function saveMarks() {
+
+        if (!validateForm()) {
+            return;
+        }
 
         console.log({
 
             subject,
-
             semester,
-
             students
 
         });
 
-        alert("Marks Saved Successfully");
+        // No popup alert
+        console.log("Marks Saved Successfully");
 
     }
 
-    return(
+    return (
 
         <DashboardLayout
             role="teacher"
@@ -80,7 +149,11 @@ function AddMarks() {
 
                     <div className="card-body">
 
+                        {/* Subject & Semester */}
+
                         <div className="row mb-4">
+
+                            {/* Subject */}
 
                             <div className="col-md-6">
 
@@ -91,12 +164,27 @@ function AddMarks() {
                                 </label>
 
                                 <select
-                                    className="form-select"
+                                    className={`form-select ${
+                                        errors.subject
+                                            ? "is-invalid"
+                                            : ""
+                                    }`}
                                     value={subject}
-                                    onChange={(e)=>setSubject(e.target.value)}
+                                    onChange={(e) => {
+
+                                        setSubject(e.target.value);
+
+                                        setErrors((prev) => ({
+                                            ...prev,
+                                            subject: ""
+                                        }));
+
+                                    }}
                                 >
 
-                                    <option value="">Choose Subject</option>
+                                    <option value="">
+                                        Choose Subject
+                                    </option>
 
                                     <option>
                                         Programming Logic & Design
@@ -114,9 +202,25 @@ function AddMarks() {
                                         Database Management System
                                     </option>
 
+                                    <option>
+                                        Web Technology
+                                    </option>
+
                                 </select>
 
+                                {errors.subject && (
+
+                                    <div className="text-danger mt-1">
+
+                                        {errors.subject}
+
+                                    </div>
+
+                                )}
+
                             </div>
+
+                            {/* Semester */}
 
                             <div className="col-md-6">
 
@@ -127,23 +231,61 @@ function AddMarks() {
                                 </label>
 
                                 <select
-                                    className="form-select"
+                                    className={`form-select ${
+                                        errors.semester
+                                            ? "is-invalid"
+                                            : ""
+                                    }`}
                                     value={semester}
-                                    onChange={(e)=>setSemester(e.target.value)}
+                                    onChange={(e) => {
+
+                                        setSemester(e.target.value);
+
+                                        setErrors((prev) => ({
+                                            ...prev,
+                                            semester: ""
+                                        }));
+
+                                    }}
                                 >
 
-                                    <option value="">Choose Semester</option>
+                                    <option value="">
+                                        Choose Semester
+                                    </option>
 
-                                    <option>1st Semester</option>
-                                    <option>2nd Semester</option>
-                                    <option>3rd Semester</option>
-                                    <option>4th Semester</option>
+                                    <option>
+                                        1st Semester
+                                    </option>
+
+                                    <option>
+                                        2nd Semester
+                                    </option>
+
+                                    <option>
+                                        3rd Semester
+                                    </option>
+
+                                    <option>
+                                        4th Semester
+                                    </option>
 
                                 </select>
+
+                                {errors.semester && (
+
+                                    <div className="text-danger mt-1">
+
+                                        {errors.semester}
+
+                                    </div>
+
+                                )}
 
                             </div>
 
                         </div>
+
+                        {/* Marks Table */}
 
                         <table className="table table-bordered table-hover">
 
@@ -155,9 +297,9 @@ function AddMarks() {
 
                                     <th>Student</th>
 
-                                    <th>Internal (40)</th>
+                                    <th>Internal (50)</th>
 
-                                    <th>External (60)</th>
+                                    <th>External (50)</th>
 
                                 </tr>
 
@@ -165,104 +307,119 @@ function AddMarks() {
 
                             <tbody>
 
-                                {
+                                {students.map((student, index) => (
 
-                                    students.map((student,index)=>(
+                                    <tr key={student.id}>
 
-                                        <tr key={student.id}>
+                                        <td>
 
-                                            <td>
+                                            {student.roll}
 
-                                                {student.roll}
+                                        </td>
 
-                                            </td>
+                                        <td>
 
-                                            <td>
+                                            {student.name}
 
-                                                {student.name}
+                                        </td>
 
-                                            </td>
+                                        {/* Internal */}
 
-                                            <td>
+                                        <td>
 
-                                                <input
+                                            <input
+                                                type="number"
+                                                className={`form-control ${
+                                                    errors[
+                                                        `${index}_internal`
+                                                    ]
+                                                        ? "is-invalid"
+                                                        : ""
+                                                }`}
+                                                min="0"
+                                                max="50"
+                                                value={student.internal}
+                                                onChange={(e) =>
+                                                    handleMarks(
+                                                        index,
+                                                        "internal",
+                                                        e.target.value
+                                                    )
+                                                }
+                                            />
 
-                                                    type="number"
+                                            {errors[
+                                                `${index}_internal`
+                                            ] && (
 
-                                                    className="form-control"
+                                                <div className="text-danger mt-1">
 
-                                                    min="0"
-
-                                                    max="40"
-
-                                                    value={student.internal}
-
-                                                    onChange={(e)=>
-
-                                                        handleMarks(
-
-                                                            index,
-
-                                                            "internal",
-
-                                                            e.target.value
-
-                                                        )
-
+                                                    {
+                                                        errors[
+                                                            `${index}_internal`
+                                                        ]
                                                     }
 
-                                                />
+                                                </div>
 
-                                            </td>
+                                            )}
 
-                                            <td>
+                                        </td>
 
-                                                <input
+                                        {/* External */}
 
-                                                    type="number"
+                                        <td>
 
-                                                    className="form-control"
+                                            <input
+                                                type="number"
+                                                className={`form-control ${
+                                                    errors[
+                                                        `${index}_external`
+                                                    ]
+                                                        ? "is-invalid"
+                                                        : ""
+                                                }`}
+                                                min="0"
+                                                max="50"
+                                                value={student.external}
+                                                onChange={(e) =>
+                                                    handleMarks(
+                                                        index,
+                                                        "external",
+                                                        e.target.value
+                                                    )
+                                                }
+                                            />
 
-                                                    min="0"
+                                            {errors[
+                                                `${index}_external`
+                                            ] && (
 
-                                                    max="60"
+                                                <div className="text-danger mt-1">
 
-                                                    value={student.external}
-
-                                                    onChange={(e)=>
-
-                                                        handleMarks(
-
-                                                            index,
-
-                                                            "external",
-
-                                                            e.target.value
-
-                                                        )
-
+                                                    {
+                                                        errors[
+                                                            `${index}_external`
+                                                        ]
                                                     }
 
-                                                />
+                                                </div>
 
-                                            </td>
+                                            )}
 
-                                        </tr>
+                                        </td>
 
-                                    ))
+                                    </tr>
 
-                                }
+                                ))}
 
                             </tbody>
 
                         </table>
 
                         <button
-
                             className="btn btn-success"
-
                             onClick={saveMarks}
-
                         >
 
                             Save Marks
